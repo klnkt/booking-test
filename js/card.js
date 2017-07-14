@@ -47,7 +47,6 @@ window.renderOfferCard = (function () {
     offerDialogElement.removeChild(firstOfferCardElement);
     offerDialogElement.appendChild(firstOfferCard);
     offerDialogElement.style.display = 'block';
-
-    return renderCard;
   };
+  return renderCard;
 })();

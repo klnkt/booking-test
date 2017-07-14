@@ -1,6 +1,6 @@
 'use strict';
 
-(function () {
+window.offerForm = (function () {
   var offerForm = document.querySelector('.notice__form');
   var offerTypeElement = offerForm.querySelector('#type');
   var offerPriceElement = offerForm.querySelector('#price');
@@ -9,45 +9,40 @@
   var checkinElement = offerForm.querySelector('#time');
   var checkoutElement = offerForm.querySelector('#timeout');
   var createOfferButton = offerForm.querySelector('.form__submit');
+  var offerAddress = document.querySelector('#address');
 
-  offerTypeElement.addEventListener('change', function () {
-    var selectedOption = offerTypeElement.options[offerTypeElement.selectedIndex];
-    switch (selectedOption.value) {
-      case 'Квартира':
-        offerPriceElement.placeholder = '1000';
-        break;
-      case 'Лачуга':
-        offerPriceElement.placeholder = '0';
-        break;
-      case 'Дворец':
-        offerPriceElement.placeholder = '10000';
-        break;
-    }
-  });
-  roomsNumberElement.addEventListener('change', function () {
-    var selectedOption =
-      roomsNumberElement.options[roomsNumberElement.selectedIndex];
-    switch (selectedOption.value) {
-      case '2 комнаты':
-        guestsNumberElement.selectedIndex = 0;
-        break;
-      case '100 комнат':
-        guestsNumberElement.selectedIndex = 0;
-        break;
-      case '1 комната':
-        guestsNumberElement.selectedIndex = 1;
-        break;
-    }
-  });
-  checkinElement.addEventListener('change', function () {
-    checkoutElement.selectedIndex = checkinElement.selectedIndex;
-  });
-  checkoutElement.addEventListener('change', function () {
-    checkinElement.selectedIndex = checkoutElement.selectedIndex;
-  });
+  var syncSelectedIndex = function (element1, element2, arr1, arr2) {
+    element2.selectedIndex = element1.selectedIndex;
+  };
+
+  var syncMinVal = function (element1, element2, arr1, arr2) {
+    element2.placeholder = arr2[element1.selectedIndex];
+  };
+
+  var switchSelectedIndex = function (element1, element2, arr1, arr2) {
+    element2.selectedIndex = arr2[element1.selectedIndex];
+  };
+
+  window.synchronizeFields(
+      checkinElement, checkoutElement, [], [], syncSelectedIndex);
+  window.synchronizeFields(
+      checkoutElement, checkinElement, [], [], syncSelectedIndex);
+  window.synchronizeFields(
+      offerTypeElement, offerPriceElement, [], [1000, 0, 10000], syncMinVal);
+  window.synchronizeFields(
+      roomsNumberElement, guestsNumberElement, [], [1, 0, 0], switchSelectedIndex);
+
   createOfferButton.addEventListener('click', function () {
     if (offerForm.reportValidity()) {
       offerForm.reset();
     }
   });
+
+  var setAddress = function (coordinateX, coordinateY) {
+    offerAddress.value = coordinateX + ', ' + coordinateY;
+  };
+
+  return {
+    setAddress: setAddress
+  };
 })();

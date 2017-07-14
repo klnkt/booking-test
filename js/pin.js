@@ -35,15 +35,10 @@ window.pin = (function () {
     pinElement.style.left = coordinateX + 'px';
     pinElement.style.top = coordinateY + 'px';
     pinElement.addEventListener('click', function () {
-      window.renderCard(pinData);
+      window.renderOfferCard(pinData);
       activatePin(pinElement);
     });
-    pinElement.addEventListener('keydown', function (evt) {
-      if (evt.keyCode === 13) {
-        activatePin(pinElement);
-        window.renderCard(pinData);
-      }
-    });
+    window.showCard(pinElement, pinData);
     return pinElement;
   };
 
