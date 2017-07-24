@@ -1,30 +1,9 @@
 'use strict';
 
 (function () {
-  var dialogElement = document.querySelector('.dialog');
-  var closeDialog = document.querySelector('.dialog__close');
-
-  document.addEventListener('keydown', onDialogEscPressed);
-
-  var closeOfferDialog = function () {
-    dialogElement.style.display = 'none';
-    window.pin.deactivatePin();
-    document.removeEventListener('keydown', onDialogEscPressed);
-  };
-
-  var onDialogEscPressed = function (evt) {
-    if (evt.keyCode === 27) {
-      closeOfferDialog();
-    }
-  };
-
-  closeDialog.addEventListener('click', function () {
-    closeOfferDialog();
-  });
-
   var offers = window.createOffers();
   window.pin.addPinsToMap(offers);
-  window.renderOfferCard(offers[0]);
+  window.showCard(offers[0]);
 
   var mainPin = document.querySelector('.pin__main');
   mainPin.addEventListener('mousedown', function (evt) {

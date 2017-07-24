@@ -48,7 +48,8 @@ window.createOffers = (function () {
           guests: getRandomNumber(1, 10),
           checkin: offerCheckin[getRandomNumber(0, offerCheckin.length - 1)],
           checkout: offerCheckout[getRandomNumber(0, offerCheckout.length - 1)],
-          features: getRandomArray(offerFeatures, getRandomNumber(1, offerFeatures.length - 1)),
+          features: getRandomArray(offerFeatures,
+              getRandomNumber(1, offerFeatures.length - 1)),
           description: '',
           photos: []
         },

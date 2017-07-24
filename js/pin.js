@@ -3,6 +3,7 @@
 window.pin = (function () {
   var map = document.querySelector('.tokyo__pin-map');
   var fragment = document.createDocumentFragment();
+  var ENTER_KEY_CODE = 13;
 
   var activatePin = function (pin) {
     var currentActivePin = map.querySelector('.pin--active');
@@ -35,10 +36,15 @@ window.pin = (function () {
     pinElement.style.left = coordinateX + 'px';
     pinElement.style.top = coordinateY + 'px';
     pinElement.addEventListener('click', function () {
-      window.renderOfferCard(pinData);
       activatePin(pinElement);
+      window.showCard(pinData, deactivatePin);
     });
-    window.showCard(pinElement, pinData);
+    pinElement.addEventListener('keydown', function (evt) {
+      if (evt.keyCode === ENTER_KEY_CODE) {
+        activatePin(pinElement);
+        window.showCard(pinData, deactivatePin);
+      }
+    });
     return pinElement;
   };
 

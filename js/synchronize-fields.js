@@ -2,10 +2,11 @@
 
 window.synchronizeFields = (function () {
   return function (element1, element2, arr1, arr2, cb) {
-    console.log('1');
     element1.addEventListener('change', function () {
-      cb(element1, element2, arr1, arr2);
-      console.log('1');
+      var value1 = element1.value;
+      var index1 = arr1.indexOf(value1);
+      var value2 = arr2[index1];
+      cb(element2, value2);
     });
   };
 })();
