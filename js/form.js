@@ -11,29 +11,10 @@ window.offerForm = (function () {
   var createOfferButton = offerForm.querySelector('.form__submit');
   var offerAddress = document.querySelector('#address');
 
-  // var syncSelectedIndex = function (element1, element2, arr1, arr2) {
-  //   element2.value = element1.value;
-  // };
-  //
-  // var syncMinVal = function (element1, element2, arr1, arr2) {
-  //   element2.placeholder = arr2[element1.selectedIndex];
-  // };
-  //
-  // var switchSelectedIndex = function (element1, element2, arr1, arr2) {
-  //   element2.value = arr2[element1.selectedIndex];
-  // };
-  //
-  // window.synchronizeFields(
-  //     checkinElement, checkoutElement, [], [], syncSelectedIndex);
-  // window.synchronizeFields(
-  //     checkoutElement, checkinElement, [], [], syncSelectedIndex);
-  // window.synchronizeFields(
-  //     offerTypeElement, offerPriceElement, [], [1000, 0, 10000], syncMinVal);
-  // window.synchronizeFields(
-  //     roomsNumberElement, guestsNumberElement, [], [1, 0, 0], switchSelectedIndex);
-  //     var syncValues = function (element, value) {
-  //       element.value = value;
-  //     };
+  var setAddress = function (coordinateX, coordinateY) {
+    offerAddress.value = coordinateX + ', ' + coordinateY;
+  };
+
   var syncValues = function (element, value) {
     element.value = value;
   };
@@ -41,6 +22,12 @@ window.offerForm = (function () {
   var syncValueWithMin = function (element, value) {
     element.placeholder = value;
   };
+
+  createOfferButton.addEventListener('click', function () {
+    if (offerForm.reportValidity()) {
+      offerForm.reset();
+    }
+  });
 
   window.synchronizeFields(
       checkinElement,
@@ -70,15 +57,6 @@ window.offerForm = (function () {
       ['1000', '0', '10000'],
       syncValueWithMin
     );
-  createOfferButton.addEventListener('click', function () {
-    if (offerForm.reportValidity()) {
-      offerForm.reset();
-    }
-  });
-
-  var setAddress = function (coordinateX, coordinateY) {
-    offerAddress.value = coordinateX + ', ' + coordinateY;
-  };
 
   return {
     setAddress: setAddress
