@@ -25,7 +25,7 @@ window.load = function (url, onLoad, onError) {
     onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
   });
 
-  xhr.timeout = 10; // 10sec
+  xhr.timeout = 10000; // 10sec
 
   xhr.open('GET', url);
   xhr.send();
