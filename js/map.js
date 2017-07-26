@@ -15,6 +15,9 @@
     errorWarning.classList.add('error_panel');
     errorWarning.innerHTML = message;
     document.body.insertAdjacentElement('afterbegin', errorWarning);
+    window.setTimeout(function () {
+      errorWarning.classList.add('active');
+    }, 10);
   };
 
   window.load(URL, onLoad, onError);
