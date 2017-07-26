@@ -3,6 +3,7 @@
 (function () {
   var URL =
     'https://intensive-javascript-server-kjgvxfepjl.now.sh/keksobooking/data';
+
   var onLoad = function (data) {
     var offers = data;
     window.pin.addPinsToMap(offers);
@@ -10,9 +11,12 @@
   };
 
   var onError = function (message) {
-    console.log('message');
+    var errorWarning = document.createElement('div');
+    errorWarning.classList.add('error_panel');
+    errorWarning.innerHTML = message;
+    document.body.insertAdjacentElement('afterbegin', errorWarning);
   };
-  debugger;
+
   window.load(URL, onLoad, onError);
 
   var mainPin = document.querySelector('.pin__main');
