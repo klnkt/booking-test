@@ -661,11 +661,17 @@ select option:hover {
     left: 0;
     top: 0;
     width: 100%;
-    max-height: 50px;
+    max-height: 0;
     background-color: #595959;
     text-align: center;
     vertical-align: middle;
     color: white;
     font-size: 20px;
     line-height: 20px;
+    transition: max-height 0.5s ease;
+    overflow: hidden;
+}
+
+.error_panel.active {
+    max-height: 50px;
 }
