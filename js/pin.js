@@ -48,21 +48,32 @@ window.pin = (function () {
     return pinElement;
   };
 
-  var addElementToFragment = function (element) {
-    fragment.appendChild(element);
+  var addElementToFragment = function (frg, element) {
+    frg.appendChild(element);
   };
 
   var addPinsToMap = function (offersData) {
     for (var i = 0; i < offersData.length; i++) {
       var pinElement = renderPin(offersData[i]);
-      addElementToFragment(pinElement);
+      if (i === 0) {
+        activatePin(pinElement);
+      }
+      addElementToFragment(fragment, pinElement);
     }
     map.appendChild(fragment);
+  };
+
+  var clearMap = function (offersData) {
+    var pins = map.querySelectorAll('.pin');
+    for (var i = 0; i < pins.length; i++) {
+      map.removeChild(pins[i]);
+    }
   };
 
   return {
     activatePin: activatePin,
     deactivatePin: deactivatePin,
-    addPinsToMap: addPinsToMap
+    addPinsToMap: addPinsToMap,
+    clearMap: clearMap
   };
 })();
