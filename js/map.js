@@ -1,9 +1,26 @@
 'use strict';
 
 (function () {
-  var offers = window.createOffers();
-  window.pin.addPinsToMap(offers);
-  window.showCard(offers[0]);
+  var URL =
+    'https://intensive-javascript-server-kjgvxfepjl.now.sh/keksobooking/data';
+
+  var onLoad = function (data) {
+    var offers = data;
+    window.pin.addPinsToMap(offers);
+    window.showCard(offers[0]);
+  };
+
+  var onError = function (message) {
+    var errorWarning = document.createElement('div');
+    errorWarning.classList.add('error_panel');
+    errorWarning.innerHTML = message;
+    document.body.insertAdjacentElement('afterbegin', errorWarning);
+    window.setTimeout(function () {
+      errorWarning.classList.add('active');
+    }, 10);
+  };
+
+  window.load(URL, onLoad, onError);
 
   var mainPin = document.querySelector('.pin__main');
   mainPin.addEventListener('mousedown', function (evt) {
