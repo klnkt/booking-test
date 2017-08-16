@@ -1,13 +1,15 @@
 'use strict';
 
-(function () {
+window.debounce = (function () {
   var DEBOUNCE_INTERVAL = 300;
-  var lastTimeout;
 
-  window.debounce = function (func) {
-    if (lastTimeout) {
-      window.clearTimeout(lastTimeout);
-    }
-    lastTimeout = window.setTimeout(func, DEBOUNCE_INTERVAL);
+  return function (func) {
+    var lastTimeout;
+    return function () {
+      if (lastTimeout) {
+        window.clearTimeout(lastTimeout);
+      }
+      lastTimeout = window.setTimeout(func, DEBOUNCE_INTERVAL);
+    };
   };
 })();

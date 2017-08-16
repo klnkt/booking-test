@@ -2,6 +2,9 @@
 
 (function () {
   var filterForm = document.querySelector('.tokyo__filters');
+  var featuresElements = filterForm
+      .querySelector('#housing_features')
+      .querySelectorAll('input');
   var offers = [];
   var URL =
     'https://intensive-javascript-server-kjgvxfepjl.now.sh/keksobooking/data';
@@ -35,24 +38,31 @@
       switch (value1) {
         case 'low':
           return value2 < 10000;
-          break;
         case 'middle':
           return value2 >= 10000 && value2 < 50000;
-          break;
         case 'high':
           return value2 >= 50000;
-          break;
         default:
           return false;
       }
     };
 
-    var filterFeatures = function (arr1, arr2) {
-      var boolean = true;
-      for (var i = 0; i < arr1.length; i++) {
-        boolean = boolean && (arr2.indexOf(arr1[i]) !== -1);
+    var getSelectedFeatures = function () {
+      var array = [];
+      for (var i = 0; i < featuresElements.length; i++) {
+        if (featuresElements[i].checked) {
+          array.push(featuresElements[i].value);
+        }
       }
-      return boolean;
+      return array;
+    };
+
+    var filterFeatures = function (arr1, arr2) {
+      var result = true;
+      for (var i = 0; i < arr1.length; i++) {
+        result = result && (arr2.indexOf(arr1[i]) !== -1);
+      }
+      return result;
     };
 
     var arr = [
@@ -75,42 +85,26 @@
         name: 'guests',
         value: filterForm.querySelector('#housing_guests-number').value,
         cb: filterValues
+      },
+      {
+        name: 'features',
+        value: getSelectedFeatures(),
+        cb: filterFeatures
       }
     ];
 
-    var featuresSelected = (function () {
-      var featuresElements = filterForm
-          .querySelector('#housing_features')
-          .querySelectorAll('input');
-      var array = [];
-      for (var i = 0; i < featuresElements.length; i++) {
-        if (featuresElements[i].checked) {
-          array.push(featuresElements[i].value);
-        }
-      }
-      return array;
-    })();
-
-
     var filterOffers = function (element) {
-      var boolean = true;
+      var result = true;
       for (var i = 0; i < arr.length; i++) {
         if (arr[i].value !== 'any') {
-          boolean =
-            boolean && arr[i].cb(arr[i].value, element.offer[arr[i].name]);
+          result =
+            result && arr[i].cb(arr[i].value, element.offer[arr[i].name]);
         }
       }
-      if (boolean === true) {
-        boolean =
-          boolean && filterFeatures(featuresSelected, element.offer.features);
-      }
-      return boolean;
+      return result;
     };
 
-    var offersFiltered = offers.filter(function (it) {
-      var boolean = filterOffers(it);
-      return boolean;
-    });
+    var offersFiltered = offers.filter(filterOffers);
 
     window.pin.clearMap();
     window.pin.addPinsToMap(offersFiltered);
