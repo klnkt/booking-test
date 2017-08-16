@@ -1,6 +1,8 @@
 'use strict';
 
 window.load = function (url, onLoad, onError) {
+  var TIMEOUT_INTERVAL = 10000;
+
   var xhr = new XMLHttpRequest();
   xhr.responseType = 'json';
   xhr.addEventListener('load', function () {
@@ -22,10 +24,10 @@ window.load = function (url, onLoad, onError) {
     onError('Произошла ошибка соединения');
   });
   xhr.addEventListener('timeout', function () {
-    onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
+    onError('Запрос не успел выполниться за ' + xhr.timeout + ' мс');
   });
 
-  xhr.timeout = 10000; // 10sec
+  xhr.timeout = TIMEOUT_INTERVAL;
 
   xhr.open('GET', url);
   xhr.send();

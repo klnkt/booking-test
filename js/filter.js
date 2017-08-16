@@ -120,6 +120,6 @@
   window.load(URL, onLoad, onError);
 
   filterForm.addEventListener('change', function (evt) {
-    updatePins();
+    window.debounce(updatePins);
   });
 })();
