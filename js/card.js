@@ -1,7 +1,7 @@
 'use strict';
 
 window.renderOfferCard = (function () {
-  var offerTypeRU = {
+  var OFFER_TYPE_RU = {
     flat: 'Квартира',
     house: 'Дом',
     bungalo: 'Бунгало'
@@ -28,7 +28,7 @@ window.renderOfferCard = (function () {
     offerCard.querySelector('.lodge__price').innerHTML =
       arr.offer.price + '&#x20bd;/ночь';
     offerCard.querySelector('.lodge__type').textContent =
-      offerTypeRU[arr.offer.type];
+      OFFER_TYPE_RU[arr.offer.type];
     offerCard.querySelector('.lodge__rooms-and-guests').textContent =
       'Для ' + arr.offer.guests + ' гостей в ' + arr.offer.rooms +
       ' комнатах';
@@ -39,7 +39,7 @@ window.renderOfferCard = (function () {
       .querySelector('.lodge__features')
       .appendChild(renderFeatures(arr.offer.features));
     offerCard.querySelector('.lodge__description').textContent =
-    arr.offer.description;
+      arr.offer.description;
     document.querySelector('.dialog__title').querySelector('img').src =
       arr.author.avatar;
     return offerCard;

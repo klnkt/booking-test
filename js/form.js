@@ -29,28 +29,28 @@ window.offerForm = (function () {
     }
   });
 
-  window.synchronizeFields(
+  window.utils.synchronizeFields(
       checkinElement,
       checkoutElement,
       ['12', '13', '14'],
       ['12', '13', '14'],
       syncValues
     );
-  window.synchronizeFields(
+  window.utils.synchronizeFields(
       checkoutElement,
       checkinElement,
       ['12', '13', '14'],
       ['12', '13', '14'],
       syncValues
     );
-  window.synchronizeFields(
+  window.utils.synchronizeFields(
       roomsNumberElement,
       guestsNumberElement,
       ['1', '2', '100'],
       ['no guests', '3 guests', '3 guests'],
       syncValues
     );
-  window.synchronizeFields(
+  window.utils.synchronizeFields(
       offerTypeElement,
       offerPriceElement,
       ['flat', 'shack', 'palace'],

@@ -4,6 +4,9 @@ window.pin = (function () {
   var map = document.querySelector('.tokyo__pin-map');
   var fragment = document.createDocumentFragment();
   var ENTER_KEY_CODE = 13;
+  var PIN_HEIGHT = 150;
+  var PIN_WIDTH = 56;
+  var AVATAR_SIZE = 40;
 
   var activatePin = function (pin) {
     var currentActivePin = map.querySelector('.pin--active');
@@ -21,24 +24,27 @@ window.pin = (function () {
   };
 
   var renderPin = function (pinData) {
-    var coordinateX = pinData.location.x - 28;
-    var coordinateY = pinData.location.y - 75;
+    var coordinateX = pinData.location.x - PIN_WIDTH / 2;
+    var coordinateY = pinData.location.y - PIN_HEIGHT / 2;
     var autorAvatarUrl = pinData.author.avatar;
     var pinElement = document.createElement('div');
     pinElement.classList.add('pin');
     var avatarElement = document.createElement('img');
+
     avatarElement.src = autorAvatarUrl;
     avatarElement.tabIndex = 0;
-    avatarElement.width = 40;
-    avatarElement.height = 40;
+    avatarElement.width = AVATAR_SIZE;
+    avatarElement.height = AVATAR_SIZE;
     avatarElement.classList.add('rounded');
     pinElement.appendChild(avatarElement);
     pinElement.style.left = coordinateX + 'px';
     pinElement.style.top = coordinateY + 'px';
+
     pinElement.addEventListener('click', function () {
       activatePin(pinElement);
       window.showCard(pinData, deactivatePin);
     });
+
     pinElement.addEventListener('keydown', function (evt) {
       if (evt.keyCode === ENTER_KEY_CODE) {
         activatePin(pinElement);
@@ -64,7 +70,7 @@ window.pin = (function () {
   };
 
   var clearMap = function (offersData) {
-    var pins = map.querySelectorAll('.pin');
+    var pins = map.querySelectorAll('.pin:not(.pin__main)');
     for (var i = 0; i < pins.length; i++) {
       map.removeChild(pins[i]);
     }

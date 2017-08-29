@@ -414,6 +414,18 @@ select option:hover {
     background: #dadad4;
 }
 
+.dragover:before {
+    display: block;
+    position: relative;
+    left: -5px;
+    content: ' ';
+    height: 70px;
+    width: 3px;
+    margin: 0 2px;
+    background-color: black;
+
+}
+
 .form__submit {
     display: block;
     margin: 35px auto;

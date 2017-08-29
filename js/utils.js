@@ -1,9 +1,8 @@
 'use strict';
 
-window.debounce = (function () {
+window.utils = (function () {
   var DEBOUNCE_INTERVAL = 300;
-
-  return function (func) {
+  var debounce = function (func) {
     var lastTimeout;
     return function () {
       if (lastTimeout) {
@@ -11,5 +10,30 @@ window.debounce = (function () {
       }
       lastTimeout = window.setTimeout(func, DEBOUNCE_INTERVAL);
     };
+  };
+
+  var readFileInput = function (element, file, cb) {
+    var reader = new FileReader();
+
+    reader.addEventListener('load', function () {
+      cb(element, reader.result);
+    });
+
+    reader.readAsDataURL(file);
+  };
+
+  var synchronizeFields = function (element1, element2, arr1, arr2, cb) {
+    element1.addEventListener('change', function () {
+      var value1 = element1.value;
+      var index1 = arr1.indexOf(value1);
+      var value2 = arr2[index1];
+      cb(element2, value2);
+    });
+  };
+
+  return {
+    debounce: debounce,
+    readFileInput: readFileInput,
+    synchronizeFields: synchronizeFields
   };
 })();

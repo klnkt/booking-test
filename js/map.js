@@ -1,45 +1,37 @@
 'use strict';
 
 (function () {
-  var mainPin = document.querySelector('.pin__main');
-  mainPin.addEventListener('mousedown', function (evt) {
-    evt.preventDefault();
+  var offers = [];
+  var filterForm = document.querySelector('.tokyo__filters');
+  var URL =
+    'https://intensive-javascript-server-kjgvxfepjl.now.sh/keksobooking/data';
 
-    var startCoords = {
-      x: evt.clientX,
-      y: evt.clientY
-    };
+  var onLoad = function (data) {
+    offers = data;
+    window.pin.addPinsToMap(offers);
+    window.showCard(offers[0], window.pin.deactivatePin);
+  };
 
-    var onMouseMove = function (moveEvt) {
-      moveEvt.preventDefault();
+  var onError = function (message) {
+    var errorWarning = document.createElement('div');
+    errorWarning.classList.add('error_panel');
+    errorWarning.innerHTML = message;
+    document.body.insertAdjacentElement('afterbegin', errorWarning);
+    window.setTimeout(function () {
+      errorWarning.classList.add('active');
+    }, 10);
+  };
 
-      var shift = {
-        x: startCoords.x - moveEvt.clientX,
-        y: startCoords.y - moveEvt.clientY
-      };
+  var updatePins = function () {
+    var filterResult = offers.filter(window.filterOffers);
+    window.pin.clearMap();
+    window.pin.addPinsToMap(filterResult);
+    window.showCard(filterResult[0], window.pin.deactivatePin);
+  };
 
-      startCoords = {
-        x: moveEvt.clientX,
-        y: moveEvt.clientY
-      };
-
-      mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
-      mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
-      var mainPinLocation = {
-        x: mainPin.offsetTop - shift.y + mainPin.offsetHeight,
-        y: mainPin.offsetLeft - shift.x + mainPin.offsetHeight / 2
-      };
-      window.offerForm.setAddress(mainPinLocation.x, mainPinLocation.y);
-    };
-
-    var onMouseUp = function (upEvt) {
-      upEvt.preventDefault();
-
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
-    };
-
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
+  window.load(URL, onLoad, onError);
+  filterForm.addEventListener('change', function (evt) {
+    // window.utils.debounce(updatePins);
+    updatePins();
   });
 })();
