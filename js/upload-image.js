@@ -37,13 +37,10 @@
     img.src = source;
   };
 
-  var addIMG = function (element, src) {
+  var addBG = function (element, src) {
     element.classList.add('filled');
-    var img = document.createElement('img');
-    img.src = src;
-    img.height = 70;
-    img.width = 70;
-    element.appendChild(img);
+    element.style.background = 'url(' + src + ') center center no-repeat';
+    element.style.backgroundSize = 'cover';
   };
 
   avatarInput.addEventListener('change', function (evt) {
@@ -53,7 +50,7 @@
 
   photoInput.addEventListener('change', function (evt) {
     var files = photoInput.files;
-    uploadFiles(getPhotoElements(), files, addIMG);
+    uploadFiles(getPhotoElements(), files, addBG);
   });
 
   avatarDropzone.addEventListener('dragover', function (evt) {
@@ -76,7 +73,7 @@
     evt.preventDefault();
     var files = evt.dataTransfer.files;
     if (files) {
-      uploadFiles(getPhotoElements(), files, addIMG);
+      uploadFiles(getPhotoElements(), files, addBG);
     }
   });
 })();

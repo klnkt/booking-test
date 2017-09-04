@@ -414,18 +414,23 @@ select option:hover {
     background: #dadad4;
 }
 
-.dragover:before {
-    display: block;
-    position: relative;
-    left: -5px;
-    content: ' ';
-    height: 70px;
-    width: 3px;
-    margin: 0 2px;
-    background-color: black;
-
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: row;
 }
 
+.container .hover {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+}
+
+.container .placeholder {
+  filter: grayscale(85%);
+  filter: brightness(0.5);
+}
 .form__submit {
     display: block;
     margin: 35px auto;

@@ -30,8 +30,5 @@
   };
 
   window.load(URL, onLoad, onError);
-  filterForm.addEventListener('change', function (evt) {
-    // window.utils.debounce(updatePins);
-    updatePins();
-  });
+  filterForm.addEventListener('change', window.utils.debounce(updatePins));
 })();
