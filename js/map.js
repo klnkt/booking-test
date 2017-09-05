@@ -8,8 +8,10 @@
 
   var onLoad = function (data) {
     offers = data;
-    window.pin.addPinsToMap(offers);
-    window.showCard(offers[0], window.pin.deactivatePin);
+    window.pinCollection.set(offers);
+    window.pinCollection.show();
+    window.pinCollection.activateFirst();
+    window.showCard(offers[0]);
   };
 
   var onError = function (message) {

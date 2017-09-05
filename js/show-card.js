@@ -4,10 +4,10 @@ window.showCard = (function () {
   var ESC_KEY_CODE = 27;
   var ENTER_KEY_CODE = 13;
 
-  var showCard = function (pinData, onDialogClosed) {
+  var showCard = function (data) {
     var firstOfferCardElement = document.querySelector('.dialog__panel');
     var offerDialogElement = document.querySelector('#offer-dialog');
-    var offerCard = window.renderOfferCard(pinData);
+    var offerCard = window.renderOfferCard(data);
     var dialogElement = document.querySelector('.dialog');
     var closeDialog = document.querySelector('.dialog__close');
 
@@ -17,7 +17,7 @@ window.showCard = (function () {
 
     var closeOfferDialog = function () {
       dialogElement.style.display = 'none';
-      onDialogClosed();
+      window.pinCollection.deactivate();
       document.removeEventListener('keydown', onDialogEscPressed);
     };
 

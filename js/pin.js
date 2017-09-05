@@ -43,44 +43,22 @@ window.pin = (function () {
   Pin.prototype.addPinToMap = function (evt) {
     if (evt.type === 'keydown') {
       if (evt.keyCode === ENTER_KEY_CODE) {
-        this.activatePin();
+        this.activate();
         window.showCard(this.data);
       }
     } else {
-      this.activatePin();
+      this.activate();
       window.showCard(this.data);
     }
   };
 
-  Pin.prototype.activatePin = function () {
+  Pin.prototype.activate = function () {
     this.element.classList.add('pin--active');
   };
 
-  Pin.prototype.deactivatePin = function () {
+  Pin.prototype.deactivate = function () {
     this.element.classList.remove('pin--active');
   };
 
-  // var map = document.querySelector('.tokyo__pin-map');
-  // var fragment = document.createDocumentFragment();
-  // var addElementToFragment = function (frg, element) {
-  //   frg.appendChild(element);
-  // };
-
-  // var addPinsToMap = function (offersData) {
-  //   for (var i = 0; i < offersData.length; i++) {
-  //     var pinElement = renderPin(offersData[i]);
-  //     if (i === 0) {
-  //       activatePin(pinElement);
-  //     }
-  //     addElementToFragment(fragment, pinElement);
-  //   }
-  //   map.appendChild(fragment);
-  // };
-  //
-  // var clearMap = function (offersData) {
-  //   var pins = map.querySelectorAll('.pin:not(.pin__main)');
-  //   for (var i = 0; i < pins.length; i++) {
-  //     map.removeChild(pins[i]);
-  //   }
-  // };
+  return Pin;
 })();
