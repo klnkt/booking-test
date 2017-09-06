@@ -1,11 +1,14 @@
 'use strict';
 
-window.renderOfferCard = (function () {
+window.Card = (function () {
   var OFFER_TYPE_RU = {
     flat: 'Квартира',
     house: 'Дом',
     bungalo: 'Бунгало'
   };
+  var ESC_KEY_CODE = 27;
+  var ENTER_KEY_CODE = 13;
+  var closeDialog = document.querySelector('.dialog__close');
 
   var renderFeatures = function (features) {
     var featuresFragment = document.createDocumentFragment();
@@ -18,31 +21,70 @@ window.renderOfferCard = (function () {
     return featuresFragment;
   };
 
-  var renderCard = function (arr) {
+  var Card = function (data) {
+    window.BaseComponent.call(this, data, 'div');
+    this.closeOfferDialog = this.closeOfferDialog.bind(this);
+    this.onDialogEscPressed = this.onDialogEscPressed.bind(this);
+  };
+
+  window.utils.inherit(Card, window.BaseComponent);
+
+  Card.prototype.createElement = function () {
     var offerTemplate = document.querySelector('#lodge-template').content;
     var offerCard = offerTemplate.cloneNode(true);
     offerCard.querySelector('.lodge__title').textContent =
-      arr.offer.title;
+      this.data.offer.title;
     offerCard.querySelector('.lodge__address').textContent =
-      arr.offer.address;
+      this.data.offer.address;
     offerCard.querySelector('.lodge__price').innerHTML =
-      arr.offer.price + '&#x20bd;/ночь';
+      this.data.offer.price + '&#x20bd;/ночь';
     offerCard.querySelector('.lodge__type').textContent =
-      OFFER_TYPE_RU[arr.offer.type];
+      OFFER_TYPE_RU[this.data.offer.type];
     offerCard.querySelector('.lodge__rooms-and-guests').textContent =
-      'Для ' + arr.offer.guests + ' гостей в ' + arr.offer.rooms +
+      'Для ' + this.data.offer.guests + ' гостей в ' + this.data.offer.rooms +
       ' комнатах';
     offerCard.querySelector('.lodge__checkin-time').textContent =
-      'Заезд после ' + arr.offer.checkin + ', выезд до ' +
-      arr.offer.checkout;
+      'Заезд после ' + this.data.offer.checkin + ', выезд до ' +
+      this.data.offer.checkout;
     offerCard
       .querySelector('.lodge__features')
-      .appendChild(renderFeatures(arr.offer.features));
+      .appendChild(renderFeatures(this.data.offer.features));
     offerCard.querySelector('.lodge__description').textContent =
-      arr.offer.description;
-    document.querySelector('.dialog__title').querySelector('img').src =
-      arr.author.avatar;
+      this.data.offer.description;
     return offerCard;
   };
-  return renderCard;
+
+  Card.prototype.add = function (parentElement) {
+    document.addEventListener('keydown', this.onDialogEscPressed);
+    closeDialog.addEventListener('click', this.closeOfferDialog);
+    closeDialog.addEventListener('keydown', this.closeOfferDialog);
+    window.BaseComponent.prototype.add.call(this, parentElement);
+  };
+
+  Card.prototype.remove = function () {
+    document.removeEventListener('keydown', this.onDialogEscPressed);
+    closeDialog.removeEventListener('click', this.closeOfferDialog);
+    closeDialog.removeEventListener('keydown', this.closeOfferDialog);
+    window.BaseComponent.prototype.remove.call(this);
+  };
+
+  Card.prototype.onDialogEscPressed = function (evt) {
+    if (evt.keyCode === ESC_KEY_CODE) {
+      this.closeOfferDialog();
+    }
+  };
+
+  Card.prototype.closeOfferDialog = function (evt) {
+    if (evt.type === 'keydown') {
+      if (evt.keyCode === ENTER_KEY_CODE) {
+        this.remove();
+        window.pinCollection.deactivateAll();
+      }
+    } else {
+      this.remove();
+      window.pinCollection.deactivateAll();
+    }
+  };
+
+  return Card;
 })();

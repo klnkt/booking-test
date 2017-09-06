@@ -1,14 +1,15 @@
 'use strict';
 
-window.pin = (function () {
+window.Pin = (function () {
   var ENTER_KEY_CODE = 13;
   var PIN_HEIGHT = 150;
   var PIN_WIDTH = 56;
   var AVATAR_SIZE = 40;
 
-  var Pin = function (data) {
+  var Pin = function (data, callback) {
     window.BaseComponent.call(this, data, 'div');
     this.addPinToMap = this.addPinToMap.bind(this);
+    this.callback = callback;
   };
 
   window.utils.inherit(Pin, window.BaseComponent);
@@ -53,6 +54,7 @@ window.pin = (function () {
   };
 
   Pin.prototype.activate = function () {
+    this.callback();
     this.element.classList.add('pin--active');
   };
 

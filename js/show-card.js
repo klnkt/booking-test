@@ -1,41 +1,14 @@
 'use strict';
 
 window.showCard = (function () {
-  var ESC_KEY_CODE = 27;
-  var ENTER_KEY_CODE = 13;
-
-  var showCard = function (data) {
+  return function (data) {
     var firstOfferCardElement = document.querySelector('.dialog__panel');
     var offerDialogElement = document.querySelector('#offer-dialog');
-    var offerCard = window.renderOfferCard(data);
-    var dialogElement = document.querySelector('.dialog');
-    var closeDialog = document.querySelector('.dialog__close');
+    var offerCard = new window.Card(data);
 
     offerDialogElement.removeChild(firstOfferCardElement);
-    offerDialogElement.appendChild(offerCard);
-    offerDialogElement.style.display = 'block';
-
-    var closeOfferDialog = function () {
-      dialogElement.style.display = 'none';
-      window.pinCollection.deactivate();
-      document.removeEventListener('keydown', onDialogEscPressed);
-    };
-
-    var onDialogEscPressed = function (evt) {
-      if (evt.keyCode === ESC_KEY_CODE) {
-        closeOfferDialog();
-      }
-    };
-
-    document.addEventListener('keydown', onDialogEscPressed);
-    closeDialog.addEventListener('click', function () {
-      closeOfferDialog();
-    });
-    closeDialog.addEventListener('keydown', function (evt) {
-      if (evt.keyCode === ENTER_KEY_CODE) {
-        closeOfferDialog();
-      }
-    });
+    offerCard.add(offerDialogElement);
+    document.querySelector('.dialog__title').querySelector('img').src =
+      data.author.avatar;
   };
-  return showCard;
 })();

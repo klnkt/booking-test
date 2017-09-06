@@ -1,48 +1,42 @@
 'use strict';
 
 window.pinCollection = (function () {
-  var array;
+  var items = [];
 
-  var set = function (data) {
-    array = [];
-    for (var i = 0; i < data.length; i++) {
-      var pin = new window.Pin(data[i]);
-      array.push(pin);
+  var PinCollection = function () {
+    this.items = items;
+    this.deactivateAll = this.deactivateAll.bind(this);
+  };
+  PinCollection.prototype = {
+    set: function (data) {
+      this.items = [];
+      for (var i = 0; i < data.length; i++) {
+        var pin = new window.Pin(data[i], this.deactivateAll);
+        this.items.push(pin);
+      }
+    },
+    get: function () {
+      return this.items;
+    },
+    show: function (map) {
+      for (var i = 0; i < this.items.length; i++) {
+        this.items[i].add(map);
+      }
+    },
+    clear: function () {
+      for (var i = 0; i < this.items.length; i++) {
+        this.items[i].remove();
+      }
+    },
+    activateFirst: function () {
+      this.items[0].activate();
+    },
+    deactivateAll: function () {
+      for (var i = 0; i < this.items.length; i++) {
+        this.items[i].deactivate();
+      }
     }
   };
-
-  var get = function () {
-    return array;
-  };
-
-  var show = function (map) {
-    for (var i = 0; i < array.length; i++) {
-      array[i].add(map);
-    }
-  };
-
-  var clear = function () {
-    for (var i = 0; i < array.length; i++) {
-      array[i].remove();
-    }
-  };
-
-  var deactivate = function () {
-    for (var i = 0; i < array.length; i++) {
-      array[i].deactivate();
-    }
-  };
-
-  var activateFirst = function () {
-    array[0].activate();
-  };
-
-  return {
-    set: set,
-    get: get,
-    show: show,
-    clear: clear,
-    deactivate: deactivate,
-    activateFirst: activateFirst
-  };
+  var pinCollection = new PinCollection();
+  return pinCollection;
 })();
