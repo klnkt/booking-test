@@ -1,85 +1,66 @@
 'use strict';
 
-window.pin = (function () {
-  var map = document.querySelector('.tokyo__pin-map');
-  var fragment = document.createDocumentFragment();
+window.Pin = (function () {
   var ENTER_KEY_CODE = 13;
   var PIN_HEIGHT = 150;
   var PIN_WIDTH = 56;
   var AVATAR_SIZE = 40;
 
-  var activatePin = function (pin) {
-    var currentActivePin = map.querySelector('.pin--active');
-    if (currentActivePin !== null) {
-      currentActivePin.classList.remove('pin--active');
-    }
-    pin.classList.add('pin--active');
+  var Pin = function (data, callback) {
+    window.BaseComponent.call(this, data, 'div');
+    this.addPinToMap = this.addPinToMap.bind(this);
+    this.callback = callback;
   };
 
-  var deactivatePin = function () {
-    var currentActivePin = map.querySelector('.pin--active');
-    if (currentActivePin !== null) {
-      currentActivePin.classList.remove('pin--active');
-    }
-  };
+  window.utils.inherit(Pin, window.BaseComponent);
 
-  var renderPin = function (pinData) {
-    var coordinateX = pinData.location.x - PIN_WIDTH / 2;
-    var coordinateY = pinData.location.y - PIN_HEIGHT / 2;
-    var autorAvatarUrl = pinData.author.avatar;
-    var pinElement = document.createElement('div');
-    pinElement.classList.add('pin');
+  Pin.prototype.createElement = function () {
+    var element = window.BaseComponent.prototype.createElement.call(this);
     var avatarElement = document.createElement('img');
-
-    avatarElement.src = autorAvatarUrl;
+    element.classList.add('pin');
+    avatarElement.src = this.data.author.avatar;
     avatarElement.tabIndex = 0;
     avatarElement.width = AVATAR_SIZE;
     avatarElement.height = AVATAR_SIZE;
     avatarElement.classList.add('rounded');
-    pinElement.appendChild(avatarElement);
-    pinElement.style.left = coordinateX + 'px';
-    pinElement.style.top = coordinateY + 'px';
+    element.appendChild(avatarElement);
+    element.style.left = this.data.location.x - PIN_WIDTH / 2 + 'px';
+    element.style.top = this.data.location.y - PIN_HEIGHT / 2 + 'px';
+    return element;
+  };
 
-    pinElement.addEventListener('click', function () {
-      activatePin(pinElement);
-      window.showCard(pinData, deactivatePin);
-    });
+  Pin.prototype.add = function (parentElement) {
+    this.element.addEventListener('click', this.addPinToMap);
+    this.element.addEventListener('keydown', this.addPinToMap);
+    window.BaseComponent.prototype.add.call(this, parentElement);
+  };
 
-    pinElement.addEventListener('keydown', function (evt) {
+  Pin.prototype.remove = function () {
+    this.element.removeEventListener('click', this.addPinToMap);
+    this.element.removeEventListener('keydown', this.addPinToMap);
+    window.BaseComponent.prototype.remove.call(this);
+  };
+
+  Pin.prototype.addPinToMap = function (evt) {
+    if (evt.type === 'keydown') {
       if (evt.keyCode === ENTER_KEY_CODE) {
-        activatePin(pinElement);
-        window.showCard(pinData, deactivatePin);
+        this.activate();
+        window.showCard(this.data);
       }
-    });
-    return pinElement;
-  };
-
-  var addElementToFragment = function (frg, element) {
-    frg.appendChild(element);
-  };
-
-  var addPinsToMap = function (offersData) {
-    for (var i = 0; i < offersData.length; i++) {
-      var pinElement = renderPin(offersData[i]);
-      if (i === 0) {
-        activatePin(pinElement);
-      }
-      addElementToFragment(fragment, pinElement);
-    }
-    map.appendChild(fragment);
-  };
-
-  var clearMap = function (offersData) {
-    var pins = map.querySelectorAll('.pin:not(.pin__main)');
-    for (var i = 0; i < pins.length; i++) {
-      map.removeChild(pins[i]);
+    } else {
+      this.activate();
+      window.showCard(this.data);
     }
   };
 
-  return {
-    activatePin: activatePin,
-    deactivatePin: deactivatePin,
-    addPinsToMap: addPinsToMap,
-    clearMap: clearMap
+  Pin.prototype.activate = function () {
+    this.callback();
+    this.element.classList.add('pin--active');
   };
+
+  Pin.prototype.deactivate = function () {
+    this.element.classList.remove('pin--active');
+  };
+
+  return Pin;
 })();

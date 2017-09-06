@@ -5,11 +5,14 @@
   var filterForm = document.querySelector('.tokyo__filters');
   var URL =
     'https://intensive-javascript-server-kjgvxfepjl.now.sh/keksobooking/data';
+  var map = document.querySelector('.tokyo__pin-map');
 
   var onLoad = function (data) {
     offers = data;
-    window.pin.addPinsToMap(offers);
-    window.showCard(offers[0], window.pin.deactivatePin);
+    window.pinCollection.set(offers);
+    window.pinCollection.show(map);
+    window.pinCollection.activateFirst();
+    window.showCard(offers[0]);
   };
 
   var onError = function (message) {
@@ -24,14 +27,13 @@
 
   var updatePins = function () {
     var filterResult = offers.filter(window.filterOffers);
-    window.pin.clearMap();
-    window.pin.addPinsToMap(filterResult);
-    window.showCard(filterResult[0], window.pin.deactivatePin);
+    window.pinCollection.clear();
+    window.pinCollection.set(filterResult);
+    window.pinCollection.show(map);
+    window.pinCollection.activateFirst();
+    window.showCard(filterResult[0]);
   };
 
   window.load(URL, onLoad, onError);
-  filterForm.addEventListener('change', function (evt) {
-    // window.utils.debounce(updatePins);
-    updatePins();
-  });
+  filterForm.addEventListener('change', window.utils.debounce(updatePins));
 })();

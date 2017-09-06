@@ -31,9 +31,16 @@ window.utils = (function () {
     });
   };
 
+  var inherit = function (ChildClass, parentClass) {
+    var TempConstructor = function () {};
+    TempConstructor.prototype = parentClass.prototype;
+    ChildClass.prototype = new TempConstructor();
+  };
+
   return {
     debounce: debounce,
     readFileInput: readFileInput,
-    synchronizeFields: synchronizeFields
+    synchronizeFields: synchronizeFields,
+    inherit: inherit
   };
 })();
