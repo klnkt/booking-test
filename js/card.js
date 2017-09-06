@@ -8,7 +8,6 @@ window.Card = (function () {
   };
   var ESC_KEY_CODE = 27;
   var ENTER_KEY_CODE = 13;
-  var closeDialog = document.querySelector('.dialog__close');
 
   var renderFeatures = function (features) {
     var featuresFragment = document.createDocumentFragment();
@@ -23,6 +22,7 @@ window.Card = (function () {
 
   var Card = function (data) {
     window.BaseComponent.call(this, data, 'div');
+    this.closeDialog = this.element.querySelector('.dialog__close');
     this.closeOfferDialog = this.closeOfferDialog.bind(this);
     this.onDialogEscPressed = this.onDialogEscPressed.bind(this);
   };
@@ -30,8 +30,8 @@ window.Card = (function () {
   window.utils.inherit(Card, window.BaseComponent);
 
   Card.prototype.createElement = function () {
-    var offerTemplate = document.querySelector('#lodge-template').content;
-    var offerCard = offerTemplate.cloneNode(true);
+    var offerTemplate = document.querySelector('#lodge-template').content.cloneNode(true);
+    var offerCard = offerTemplate.children[0];
     offerCard.querySelector('.lodge__title').textContent =
       this.data.offer.title;
     offerCard.querySelector('.lodge__address').textContent =
@@ -51,32 +51,34 @@ window.Card = (function () {
       .appendChild(renderFeatures(this.data.offer.features));
     offerCard.querySelector('.lodge__description').textContent =
       this.data.offer.description;
+    offerCard.querySelector('.dialog__title').querySelector('img').src =
+      this.data.author.avatar;
     return offerCard;
   };
 
   Card.prototype.add = function (parentElement) {
     document.addEventListener('keydown', this.onDialogEscPressed);
-    closeDialog.addEventListener('click', this.closeOfferDialog);
-    closeDialog.addEventListener('keydown', this.closeOfferDialog);
+    this.closeDialog.addEventListener('click', this.closeOfferDialog);
+    this.closeDialog.addEventListener('keydown', this.closeOfferDialog);
     window.BaseComponent.prototype.add.call(this, parentElement);
   };
 
   Card.prototype.remove = function () {
     document.removeEventListener('keydown', this.onDialogEscPressed);
-    closeDialog.removeEventListener('click', this.closeOfferDialog);
-    closeDialog.removeEventListener('keydown', this.closeOfferDialog);
+    this.closeDialog.removeEventListener('click', this.closeOfferDialog);
+    this.closeDialog.removeEventListener('keydown', this.closeOfferDialog);
     window.BaseComponent.prototype.remove.call(this);
   };
 
   Card.prototype.onDialogEscPressed = function (evt) {
     if (evt.keyCode === ESC_KEY_CODE) {
-      this.closeOfferDialog();
+      this.closeOfferDialog(evt);
     }
   };
 
   Card.prototype.closeOfferDialog = function (evt) {
     if (evt.type === 'keydown') {
-      if (evt.keyCode === ENTER_KEY_CODE) {
+      if (evt.keyCode === ENTER_KEY_CODE || evt.keyCode === ESC_KEY_CODE) {
         this.remove();
         window.pinCollection.deactivateAll();
       }

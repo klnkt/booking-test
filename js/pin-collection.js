@@ -37,6 +37,5 @@ window.pinCollection = (function () {
       }
     }
   };
-  var pinCollection = new PinCollection();
-  return pinCollection;
+  return new PinCollection();
 })();
